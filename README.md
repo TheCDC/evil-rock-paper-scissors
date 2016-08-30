@@ -5,6 +5,7 @@ A command-line rock paper scissors game that models the player as a Markov chain
 ```
 pymarkoff
 ```
+Yo, I wrote `pymarkoff`!
 
 ## Usage
 Run `python3 evil_rps.py` from the command line to start playing!

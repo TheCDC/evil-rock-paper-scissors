@@ -26,14 +26,17 @@ beaten_by = {beats[i]: i for i in beats.keys()}
 # let the player make an arbitrary number of throws at the beginning
 # before beginning to model them.
 
+
 class QuitError(Exception):
     pass
+
 
 def user_move():
     response = ''
     while True:
         try:
-            response = input("What's your move? [r,p,s] or q to quit\n>>>").strip().upper()
+            response = input(
+                "What's your move? [r,p,s] or q to quit\n>>>").strip().upper()
         except:
             raise QuitError("Interrupted")
         if response == 'Q':
@@ -65,7 +68,10 @@ brain = pymarkoff.Markov(orders=(0, 1), discrete_mode=False)
 min_sample_size = 10
 player_score = 0
 pc_score = 0
-player_name = input("What is your name?\n>>>").strip()
+try:
+    player_name = input("What is your name?\n>>>").strip()
+except KeyboardInterrupt:
+    quit()
 try:
     with open("rps_markov_samples/" + player_name + ".txt") as f:
         samples = eval(f.read())
