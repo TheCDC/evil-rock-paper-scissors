@@ -7,4 +7,4 @@ pymarkoff
 ```
 
 ## Usage
-Run `python3 rps_markov.py` from the command line to start playing!
+Run `python3 evil_rps.py` from the command line to start playing!
