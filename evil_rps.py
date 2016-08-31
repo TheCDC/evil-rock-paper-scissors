@@ -63,45 +63,49 @@ def pc_choose(samples, brain):
         pass
     return random.choice(throw_types)
 
-brain = pymarkoff.Markov(orders=(0, 1), discrete_mode=False)
+def main():
+    brain = pymarkoff.Markov(orders=(0, 1), discrete_mode=False)
 
-min_sample_size = 10
-player_score = 0
-pc_score = 0
-try:
-    player_name = input("What is your name?\n>>>").strip()
-except KeyboardInterrupt:
-    print("Have a nice day!")
-    quit()
-try:
-    with open("rps_markov_samples/" + player_name + ".txt") as f:
-        samples = eval(f.read())
-except (FileNotFoundError, SyntaxError):
-    samples = []
-while True:
-
-    pc_choice = pc_choose(samples, brain)
+    min_sample_size = 10
+    player_score = 0
+    pc_score = 0
     try:
-        player_choice = user_move()
-    except QuitError as e:
-        with open("rps_markov_samples/" + player_name + ".txt", 'w') as f:
-            f.write(pprint.pformat(samples))
+        player_name = input("What is your name?\n>>>").strip()
+    except KeyboardInterrupt:
         print("Have a nice day!")
         quit()
+    try:
+        with open("rps_markov_samples/" + player_name + ".txt") as f:
+            samples = eval(f.read())
+    except (FileNotFoundError, SyntaxError):
+        samples = []
+    while True:
 
-    samples.append((player_choice, pc_choice))
-    brain.feed([samples[-3:]])
-    # print(dict(brain))
-    # print(samples)
-    print("You threw {}, the computer threw {}.".format(
-        *[throw_to_name[i] for i in [player_choice, pc_choice]]),end=" ")
+        pc_choice = pc_choose(samples, brain)
+        try:
+            player_choice = user_move()
+        except QuitError as e:
+            with open("rps_markov_samples/" + player_name + ".txt", 'w') as f:
+                f.write(pprint.pformat(samples))
+            print("Have a nice day!")
+            quit()
 
-    if beats[pc_choice] == player_choice:
-        print("The computer wins!")
-        pc_score += 1
-    elif beats[player_choice] == pc_choice:
-        print("You win!")
-        player_score += 1
-    elif pc_choice == player_choice:
-        print("Draw!")
-    print("Scores: PC: {}, You: {}".format(pc_score, player_score))
+        samples.append((player_choice, pc_choice))
+        brain.feed([samples[-3:]])
+        # print(dict(brain))
+        # print(samples)
+        print("You threw {}, the computer threw {}.".format(
+            *[throw_to_name[i] for i in [player_choice, pc_choice]]),end=" ")
+
+        if beats[pc_choice] == player_choice:
+            print("The computer wins!")
+            pc_score += 1
+        elif beats[player_choice] == pc_choice:
+            print("You win!")
+            player_score += 1
+        elif pc_choice == player_choice:
+            print("Draw!")
+        print("Scores: PC: {}, You: {}".format(pc_score, player_score))
+        
+if __name__ == '__main__':
+    main()
