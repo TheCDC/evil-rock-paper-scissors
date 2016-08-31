@@ -37,7 +37,7 @@ def user_move():
         try:
             response = input(
                 "What's your move? [r,p,s] or q to quit\n>>>").strip().upper()
-        except:
+        except (KeyboardInterrupt, EOFError) as e:
             raise QuitError("Interrupted")
         if response == 'Q':
             raise QuitError("Quit requested")
@@ -71,6 +71,7 @@ pc_score = 0
 try:
     player_name = input("What is your name?\n>>>").strip()
 except KeyboardInterrupt:
+    print("Have a nice day!")
     quit()
 try:
     with open("rps_markov_samples/" + player_name + ".txt") as f:
@@ -93,7 +94,7 @@ while True:
     # print(dict(brain))
     # print(samples)
     print("You threw {}, the computer threw {}.".format(
-        *[throw_to_name[i] for i in [player_choice, pc_choice]]))
+        *[throw_to_name[i] for i in [player_choice, pc_choice]]),end=" ")
 
     if beats[pc_choice] == player_choice:
         print("The computer wins!")
@@ -104,4 +105,3 @@ while True:
     elif pc_choice == player_choice:
         print("Draw!")
     print("Scores: PC: {}, You: {}".format(pc_score, player_score))
-s
