@@ -5,6 +5,7 @@
 import pymarkoff
 import random
 import pprint
+import string
 # possible moves
 
 throw_types = [
@@ -63,6 +64,10 @@ def pc_choose(samples, brain):
         pass
     return random.choice(throw_types)
 
+def filter_name(s):
+    allowed = string.ascii_letters + string.digits + ' '
+    return ''.join(i for i in s if i in allowed)
+
 def main():
     brain = pymarkoff.Markov(orders=(0, 1), discrete_mode=False)
 
@@ -70,13 +75,15 @@ def main():
     player_score = 0
     pc_score = 0
     try:
-        player_name = input("What is your name?\n>>>").strip()
+        player_name = filter_name( input("What is your name?\n>>>").strip())
+        print("Welcome, {}!".format(player_name))
     except KeyboardInterrupt:
         print("Have a nice day!")
         quit()
     try:
         with open("rps_markov_samples/" + player_name + ".txt") as f:
             samples = eval(f.read())
+        print("Welcome back, {}".format(player_name))
     except (FileNotFoundError, SyntaxError):
         samples = []
     while True:
@@ -87,7 +94,7 @@ def main():
         except QuitError as e:
             with open("rps_markov_samples/" + player_name + ".txt", 'w') as f:
                 f.write(pprint.pformat(samples))
-            print("Have a nice day!")
+            print("Have a nice day, {}!".format(player_name))
             quit()
 
         samples.append((player_choice, pc_choice))
@@ -106,6 +113,6 @@ def main():
         elif pc_choice == player_choice:
             print("Draw!")
         print("Scores: PC: {}, You: {}".format(pc_score, player_score))
-        
+
 if __name__ == '__main__':
     main()
