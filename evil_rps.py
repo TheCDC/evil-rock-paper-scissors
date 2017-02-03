@@ -37,7 +37,7 @@ def user_move():
     while True:
         try:
             response = input(
-                "What's your move? [r,p,s] or q to quit\n>>>").strip().upper()
+                "What's your move? (r)ock, (p)aper, (s)cissors, or q to quit\n>>>").strip().upper()
         except (KeyboardInterrupt, EOFError) as e:
             raise QuitError("Interrupted")
         if response == 'Q':
@@ -60,12 +60,12 @@ def pc_choose(samples, brain):
         # this error occurs when the latest moves haven't yet been seen
 
         # print("Not enough data.")
-        print(e)
+        # print(e)
         pass
     except IndexError as e:
         # this error occurs on the first move because there aren't enough samples.
         # print("Not enough samples.")
-        print(e)
+        # print(e)
         pass
     return random.choice(throw_types)
 
@@ -76,7 +76,7 @@ def filter_name(s):
 
 
 def main():
-    brain = pymarkoff.Markov([], orders=(0, 1), discrete=False)
+    brain = pymarkoff.Markov([], orders=(0, 1, 2), discrete=False)
 
     min_sample_size = 10
     player_score = 0
@@ -85,6 +85,7 @@ def main():
         player_name = filter_name(input("What is your name?\n>>>").strip())
         print("Welcome, {}!".format(player_name))
     except KeyboardInterrupt:
+        print()
         print("Have a nice day!")
         quit()
     try:
@@ -101,6 +102,7 @@ def main():
         except QuitError as e:
             with open("rps_markov_samples/" + player_name + ".txt", 'w') as f:
                 f.write(pprint.pformat(samples))
+            print()
             print("Have a nice day, {}!".format(player_name))
             quit()
 
