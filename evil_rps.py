@@ -53,29 +53,36 @@ def pc_choose(samples, brain):
     try:
         prev = samples[-1]
         # print("Trying to predict based on", prev)
-        predicted_player_move = brain.get_next(prev)
+        predicted_player_move = brain.get_next((prev,))
         # print("Prediction made!")
         return beaten_by[predicted_player_move[0]]
-    except ValueError:
+    except pymarkoff.InvalidStateError as e:
+        # this error occurs when the latest moves haven't yet been seen
+
         # print("Not enough data.")
+        print(e)
         pass
-    except IndexError:
+    except IndexError as e:
+        # this error occurs on the first move because there aren't enough samples.
         # print("Not enough samples.")
+        print(e)
         pass
     return random.choice(throw_types)
+
 
 def filter_name(s):
     allowed = string.ascii_letters + string.digits + ' '
     return ''.join(i for i in s if i in allowed)
 
+
 def main():
-    brain = pymarkoff.Markov(orders=(0, 1), discrete_mode=False)
+    brain = pymarkoff.Markov([], orders=(0, 1), discrete=False)
 
     min_sample_size = 10
     player_score = 0
     pc_score = 0
     try:
-        player_name = filter_name( input("What is your name?\n>>>").strip())
+        player_name = filter_name(input("What is your name?\n>>>").strip())
         print("Welcome, {}!".format(player_name))
     except KeyboardInterrupt:
         print("Have a nice day!")
@@ -102,7 +109,7 @@ def main():
         # print(dict(brain))
         # print(samples)
         print("You threw {}, the computer threw {}.".format(
-            *[throw_to_name[i] for i in [player_choice, pc_choice]]),end=" ")
+            *[throw_to_name[i] for i in [player_choice, pc_choice]]), end=" ")
 
         if beats[pc_choice] == player_choice:
             print("The computer wins!")
