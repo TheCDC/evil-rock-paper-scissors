@@ -37,7 +37,7 @@ def user_move():
     while True:
         try:
             response = input(
-                "What's your move? [r,p,s] or q to quit\n>>>").strip().upper()
+                "What's your move? (r)ock, (p)aper, (s)cissors, or q to quit\n>>>").strip().upper()
         except (KeyboardInterrupt, EOFError) as e:
             raise QuitError("Interrupted")
         if response == 'Q':
@@ -56,28 +56,41 @@ def pc_choose(samples, brain):
         predicted_player_move = brain.get_next((prev,))
         # print("Prediction made!")
         return beaten_by[predicted_player_move[0]]
+<<<<<<< HEAD
     except pymarkoff.InvalidStateError:
         # print("Invalid state.")
+=======
+    except pymarkoff.InvalidStateError as e:
+        # this error occurs when the latest moves haven't yet been seen
+
+        # print("Not enough data.")
+        # print(e)
+>>>>>>> 0c15cbdafa912eaf58204230493f20889b545195
         pass
-    except IndexError:
+    except IndexError as e:
+        # this error occurs on the first move because there aren't enough samples.
         # print("Not enough samples.")
+        # print(e)
         pass
     return random.choice(throw_types)
+
 
 def filter_name(s):
     allowed = string.ascii_letters + string.digits + ' '
     return ''.join(i for i in s if i in allowed)
 
+
 def main():
-    brain = pymarkoff.Markov(orders=(0, 1), discrete_mode=False)
+    brain = pymarkoff.Markov([], orders=(0, 1, 2), discrete=False)
 
     min_sample_size = 10
     player_score = 0
     pc_score = 0
     try:
-        player_name = filter_name( input("What is your name?\n>>>").strip())
+        player_name = filter_name(input("What is your name?\n>>>").strip())
         print("Welcome, {}!".format(player_name))
     except KeyboardInterrupt:
+        print()
         print("Have a nice day!")
         quit()
     try:
@@ -97,6 +110,7 @@ def main():
         except QuitError as e:
             with open("rps_markov_samples/" + player_name + ".txt", 'w') as f:
                 f.write(pprint.pformat(samples))
+            print()
             print("Have a nice day, {}!".format(player_name))
             # print(dict(brain))
             quit()
@@ -106,7 +120,7 @@ def main():
         # print(dict(brain))
         # print(samples)
         print("You threw {}, the computer threw {}.".format(
-            *[throw_to_name[i] for i in [player_choice, pc_choice]]),end=" ")
+            *[throw_to_name[i] for i in [player_choice, pc_choice]]), end=" ")
 
         if beats[pc_choice] == player_choice:
             print("The computer wins!")
