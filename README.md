@@ -12,4 +12,4 @@ pymarkoff
 Yo, I wrote `pymarkoff`!
 
 ## Usage
-Run the appropriate launch script for your platform (`run.sh` for *nix and `run.bat` for Windows) from the command line to start playing!
+Simply execute `python3 evil_rps.py` to play!
