@@ -53,11 +53,11 @@ def pc_choose(samples, brain):
     try:
         prev = samples[-1]
         # print("Trying to predict based on", prev)
-        predicted_player_move = brain.get_next(prev)
+        predicted_player_move = brain.get_next((prev,))
         # print("Prediction made!")
         return beaten_by[predicted_player_move[0]]
-    except ValueError:
-        # print("Not enough data.")
+    except pymarkoff.InvalidStateError:
+        # print("Invalid state.")
         pass
     except IndexError:
         # print("Not enough samples.")
@@ -81,10 +81,13 @@ def main():
         print("Have a nice day!")
         quit()
     try:
-        with open("rps_markov_samples/" + player_name + ".txt") as f:
+        filename = "rps_markov_samples/" + player_name + ".txt"
+        print(filename)
+        with open(filename) as f:
             samples = eval(f.read())
         print("Welcome back, {}".format(player_name))
     except (FileNotFoundError, SyntaxError):
+        print("Welcome to Evil Rock Paper Scissor, {}".format(player_name))
         samples = []
     while True:
 
@@ -95,6 +98,7 @@ def main():
             with open("rps_markov_samples/" + player_name + ".txt", 'w') as f:
                 f.write(pprint.pformat(samples))
             print("Have a nice day, {}!".format(player_name))
+            # print(dict(brain))
             quit()
 
         samples.append((player_choice, pc_choice))
