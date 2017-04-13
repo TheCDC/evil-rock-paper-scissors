@@ -4,8 +4,8 @@
 # and uses it to predict their next move
 import pymarkoff
 import random
-import pprint
 import string
+import json
 # possible moves
 
 throw_types = [
@@ -33,6 +33,8 @@ class QuitError(Exception):
 
 
 def user_move():
+    """Ask a user for their move.
+    Sanitizes input."""
     response = ''
     while True:
         try:
@@ -50,6 +52,8 @@ def user_move():
 
 
 def pc_choose(samples, brain):
+    """Return the ai's next move based on
+    markov model of previous moves."""
     try:
         prev = samples[-1]
         # print("Trying to predict based on", prev)
@@ -71,6 +75,7 @@ def pc_choose(samples, brain):
 
 
 def filter_name(s):
+    """Return safe version of user's name."""
     allowed = string.ascii_letters + string.digits + ' '
     return ''.join(i for i in s if i in allowed)
 
@@ -92,7 +97,7 @@ def main():
         filename = "rps_markov_samples/" + player_name + ".txt"
         print(filename)
         with open(filename) as f:
-            samples = eval(f.read())
+            samples = json.load(f)
         print("Welcome back, {}".format(player_name))
     except (FileNotFoundError, SyntaxError):
         print("Welcome to Evil Rock Paper Scissor, {}".format(player_name))
@@ -104,7 +109,7 @@ def main():
             player_choice = user_move()
         except QuitError as e:
             with open("rps_markov_samples/" + player_name + ".txt", 'w') as f:
-                f.write(pprint.pformat(samples))
+                json.dump(samples, f)
             print()
             print("Have a nice day, {}!".format(player_name))
             # print(dict(brain))
@@ -126,6 +131,7 @@ def main():
         elif pc_choice == player_choice:
             print("Draw!")
         print("Scores: PC: {}, You: {}".format(pc_score, player_score))
+
 
 if __name__ == '__main__':
     main()
