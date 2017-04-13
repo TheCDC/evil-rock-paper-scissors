@@ -12,4 +12,4 @@ pymarkoff
 Yo, I wrote `pymarkoff`!
 
 ## Usage
-Simply execute `python3 evil_rps.py` to play!
+Install dependencies with `pip install -r requirements.txt` then execute `python3 evil_rps.py` to play!
