@@ -56,16 +56,11 @@ def pc_choose(samples, brain):
         predicted_player_move = brain.get_next((prev,))
         # print("Prediction made!")
         return beaten_by[predicted_player_move[0]]
-<<<<<<< HEAD
-    except pymarkoff.InvalidStateError:
-        # print("Invalid state.")
-=======
     except pymarkoff.InvalidStateError as e:
         # this error occurs when the latest moves haven't yet been seen
 
         # print("Not enough data.")
         # print(e)
->>>>>>> 0c15cbdafa912eaf58204230493f20889b545195
         pass
     except IndexError as e:
         # this error occurs on the first move because there aren't enough samples.
