@@ -7,4 +7,5 @@ setup(
     author_email="christopher.chen1995@gmail.com",
     url="https://github.com/TheCDC/evil-rock-paper-scissors",
     install_requires=["pymarkoff"],
+    packages=['evil_rock_paper_scisors']
 )
