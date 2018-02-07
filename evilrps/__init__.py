@@ -83,7 +83,6 @@ def filter_name(s):
 def main():
     brain = pymarkoff.Markov([], orders=(0, 1, 2), discrete=False)
 
-    min_sample_size = 10
     player_score = 0
     pc_score = 0
     try:
