@@ -152,13 +152,15 @@ def same_choose():
     return wrapped
 
 
+human_player = Player('Human', user_move)
+random_player = Player('Rando', random_move)
+lazy_player = Player('Lazy', same_choose())
+ai_player = Player('PC', create_ai())
+
+
 def main():
 
     print("Welcome to Evil Rock Paper Scissors")
-    human_player = Player('Human', user_move)
-    random_player = Player('Rando', random_move)
-    lazy_player = Player('Lazy', same_choose())
-    ai_player = Player('PC', create_ai())
 
     g = Game(human_player, ai_player)
     while True:
