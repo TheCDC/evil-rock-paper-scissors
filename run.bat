@@ -1,1 +1,1 @@
-python evil_rps.py
+python -m evil_rock_paper_scissors
