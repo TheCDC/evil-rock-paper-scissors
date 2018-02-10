@@ -54,8 +54,8 @@ def create_ai():
         # don't record null moves
         if other_previous_move is not None:
             samples.append(other_previous_move)
-        # update the model
-        brain.feed([samples[-memory_length:]])
+            # update the model
+            brain.feed([samples[-memory_length:]])
         # make a move based onthe model
         my_move = pc_choose(samples, brain)
         return my_move
